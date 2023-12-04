@@ -1,5 +1,6 @@
 ﻿using API.Interfaces;
 using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RabbitMQ.Client;
@@ -22,6 +23,8 @@ namespace API.Controllers
         [HttpPost("post-message")]
         public async Task<IActionResult> PostMessage([FromBody] MensagemInputModel mensagem)
         {
+            EmailService emailService = new();
+            emailService.SendEmail();
             List<Task> tarefas = new()
             {
                 Task.Run(() =>
