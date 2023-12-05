@@ -1,8 +1,7 @@
-﻿using API.Interfaces;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using System.Text.Json;
 
-namespace API.Producer
+namespace Producer
 {
     public class Producer : IProducer
     {
