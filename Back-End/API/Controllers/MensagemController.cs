@@ -1,12 +1,6 @@
-﻿using API.Interfaces;
-using API.Models;
-using API.Services;
-using Microsoft.AspNetCore.Http;
+﻿using API.Models;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+using Producer;
 
 namespace API.Controllers
 {

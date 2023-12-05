@@ -1,7 +1,8 @@
-﻿using API.Interfaces;
+﻿
 using API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Producer;
 
 namespace API.Controllers
 {

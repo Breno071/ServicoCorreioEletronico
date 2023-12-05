@@ -16,36 +16,31 @@ namespace Consumer
         };
         private const string QUEUE_NAME = "Adoptions";
 
-        public async Task Consume()
+        public List<string> Consume()
         {
-            List<Task> tasks =
-               [
-                   #region Busca as mensagens da fila Adoptions
-                   Task.Run(() =>
-                   {
-                       using var connection = _factory.CreateConnection();
-                       using var channel = connection.CreateModel();
+            List<string> messages = new();
+            using var connection = _factory.CreateConnection();
+            using var channel = connection.CreateModel();
 
-                       channel.QueueDeclare(queue: QUEUE_NAME,
-                                durable: false,
-                                exclusive: false,
-                                autoDelete: false,
-                                arguments: null);
+            channel.QueueDeclare(queue: QUEUE_NAME,
+                     durable: true,
+                     exclusive: false,
+                     autoDelete: false,
+                     arguments: null);
 
-                       var consumer = new EventingBasicConsumer(channel);
-                       consumer.Received += (model, ea) =>
-                       {
-                           var body = ea.Body.ToArray();
-                           var message = Encoding.UTF8.GetString(body);
-                       };
-                       channel.BasicConsume(queue: QUEUE_NAME,
-                                             autoAck: true,
-                                             consumer: consumer);
-                   })
-                   #endregion
-               ];
 
-            await Task.WhenAll(tasks);
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+
+                messages.Add(message);
+            };
+            channel.BasicConsume(queue: QUEUE_NAME,
+                                  autoAck: true,
+                                  consumer: consumer);
+            return messages;
         }
     }
 }

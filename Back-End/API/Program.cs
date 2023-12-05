@@ -1,6 +1,4 @@
-using API.Consumer;
-using API.Interfaces;
-using API.Producer;
+using Producer;
 using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ConnectionFactory>();
 builder.Services.AddControllers();
-builder.Services.AddScoped<IProducer, Producer>();
-builder.Services.AddScoped<IConsumer, Consumer>();
+builder.Services.AddScoped<IProducer, Producer.Producer>();
 
 var app = builder.Build();
 

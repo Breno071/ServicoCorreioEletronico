@@ -15,11 +15,6 @@ namespace Consumer
             _consumer = new();
         }
 
-        public async Task StartConsumer()
-        {
-           await _consumer.Consume();
-        }
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -30,7 +25,7 @@ namespace Consumer
                 }
                 try
                 {
-                    await StartConsumer();
+                    _consumer.Consume();
                 }
                 catch (Exception ex)
                 {
