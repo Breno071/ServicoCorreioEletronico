@@ -1,27 +1,23 @@
 ﻿using API.Interfaces;
 using API.Models;
-using API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MensagemController : ControllerBase
+    public class AdoptController : ControllerBase
     {
         private readonly IProducer _producer;
-        public MensagemController(IProducer producer)
+
+        public AdoptController(IProducer producer)
         {
             _producer = producer;
         }
 
-        [HttpPost("post-message")]
-        public async Task<IActionResult> PostMessage([FromBody] AdoptRequest message)
+        [HttpGet("adopt")]
+        public async Task<IActionResult> Adopt([FromBody] AdoptRequest message)
         {
             List<Task> tarefas = new()
             {
@@ -32,7 +28,6 @@ namespace API.Controllers
             };
 
             await Task.WhenAll(tarefas);
-
             return Accepted();
         }
     }

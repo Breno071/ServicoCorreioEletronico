@@ -5,11 +5,18 @@ namespace API.Services
 {
     public class EmailService
     {
+        private readonly IConfiguration _configuration;
+
+        public EmailService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public void SendEmail()
         {
             var fromAddress = new MailAddress("bns734683@gmail.com", "From Name");
             var toAddress = new MailAddress("brenonarde@gmail.com", "To Name");
-            const string fromPassword = "14Novembro*";
+            const string fromPassword = "vcxi lfqj hkll icst";
             const string subject = "Subject";
             const string body = "Body";
 
