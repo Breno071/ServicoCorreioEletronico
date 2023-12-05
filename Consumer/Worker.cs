@@ -7,12 +7,12 @@ namespace Consumer
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly IConsumer _consumer;
+        private readonly ClientConsumer _consumer;
 
-        public Worker(ILogger<Worker> logger, IConsumer consumer)
+        public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
-            _consumer = consumer;
+            _consumer = new();
         }
 
         public async Task StartConsumer()

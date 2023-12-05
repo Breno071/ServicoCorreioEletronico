@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Consumer
 {
-    public class ClientConsumer : IConsumer
+    public class ClientConsumer
     {
         private readonly ConnectionFactory _factory = new()
         {
@@ -39,8 +39,8 @@ namespace Consumer
                            var message = Encoding.UTF8.GetString(body);
                        };
                        channel.BasicConsume(queue: QUEUE_NAME,
-                                            autoAck: true,
-                                            consumer: consumer);
+                                             autoAck: true,
+                                             consumer: consumer);
                    })
                    #endregion
                ];
