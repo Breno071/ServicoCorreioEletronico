@@ -16,30 +16,33 @@ namespace Consumer
         };
         private const string QUEUE_NAME = "Adoptions";
 
-        public List<string> Consume()
+        public async Task<List<string>> Consume()
         {
             List<string> messages = new();
-            using var connection = _factory.CreateConnection();
-            using var channel = connection.CreateModel();
-
-            channel.QueueDeclare(queue: QUEUE_NAME,
-                     durable: true,
-                     exclusive: false,
-                     autoDelete: false,
-                     arguments: null);
-
-
-            var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) =>
+            await Task.Run(() =>
             {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
+                using var connection = _factory.CreateConnection();
+                using var channel = connection.CreateModel();
 
-                messages.Add(message);
-            };
-            channel.BasicConsume(queue: QUEUE_NAME,
-                                  autoAck: true,
-                                  consumer: consumer);
+                channel.QueueDeclare(queue: QUEUE_NAME,
+                         durable: true,
+                         exclusive: false,
+                         autoDelete: false,
+                         arguments: null);
+
+
+                var consumer = new EventingBasicConsumer(channel);
+                consumer.Received += (model, ea) =>
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+
+                    messages.Add(message);
+                };
+                channel.BasicConsume(queue: QUEUE_NAME,
+                                      autoAck: true,
+                                      consumer: consumer);
+            });
             return messages;
         }
     }

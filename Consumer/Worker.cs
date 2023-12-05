@@ -25,7 +25,7 @@ namespace Consumer
                 }
                 try
                 {
-                    _consumer.Consume();
+                    await _consumer.Consume();
                 }
                 catch (Exception ex)
                 {
