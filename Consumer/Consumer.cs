@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Consumer
+namespace ConsumerWindowsService
 {
-    public class ClientConsumer
+    public class Consumer
     {
         private readonly ConnectionFactory _factory = new()
         {
@@ -16,7 +16,7 @@ namespace Consumer
         };
         private const string QUEUE_NAME = "Adoptions";
 
-        public async Task<List<string>> Consume()
+        public async Task<List<string>> GetMessages()
         {
             List<string> messages = new();
             await Task.Run(() =>

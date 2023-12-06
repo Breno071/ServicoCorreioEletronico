@@ -2,12 +2,12 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
 
-namespace Consumer
+namespace ConsumerWindowsService
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly ClientConsumer _consumer;
+        private readonly Consumer _consumer;
 
         public Worker(ILogger<Worker> logger)
         {
@@ -25,7 +25,12 @@ namespace Consumer
                 }
                 try
                 {
-                    await _consumer.Consume();
+                    List<string> messages =  await _consumer.GetMessages();
+
+                    if (messages.Count > 0)
+                    {
+                        //Envio de email
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -11,9 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Front-End", "Front-End", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientApp", "Front-End\ClientApp\ClientApp.csproj", "{98854D8E-6DDE-4335-85BD-8EB8B305E590}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consumer", "Consumer\Consumer.csproj", "{383F1340-55C8-476C-9AB6-917F839AFFD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerWindowsService", "Consumer\ConsumerWindowsService.csproj", "{383F1340-55C8-476C-9AB6-917F839AFFD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Producer", "Producer\Producer.csproj", "{6CD4365F-60AB-4F09-8AC8-5DCEDFB8907A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Producer", "Producer\Producer.csproj", "{6CD4365F-60AB-4F09-8AC8-5DCEDFB8907A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailWindowsEmailService", "EmailWindowsEmailService\EmailWindowsEmailService.csproj", "{A19E95B4-941C-46D1-949F-29027F781F56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utills", "Utills\Utills.csproj", "{40E64053-44FB-441B-AE60-90B747EF44AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,14 @@ Global
 		{6CD4365F-60AB-4F09-8AC8-5DCEDFB8907A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CD4365F-60AB-4F09-8AC8-5DCEDFB8907A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CD4365F-60AB-4F09-8AC8-5DCEDFB8907A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A19E95B4-941C-46D1-949F-29027F781F56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A19E95B4-941C-46D1-949F-29027F781F56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A19E95B4-941C-46D1-949F-29027F781F56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A19E95B4-941C-46D1-949F-29027F781F56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40E64053-44FB-441B-AE60-90B747EF44AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40E64053-44FB-441B-AE60-90B747EF44AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40E64053-44FB-441B-AE60-90B747EF44AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40E64053-44FB-441B-AE60-90B747EF44AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

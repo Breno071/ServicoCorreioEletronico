@@ -1,4 +1,4 @@
-using ConsumerWindowsService;
+using EmailWindowsEmailService;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
