@@ -1,15 +1,23 @@
-﻿using AppRepository.Entities;
+﻿using AppRepository.Data;
+using AppRepository.Entities;
 using AppRepository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Utills.Models;
 
 namespace AppRepository.Repository
 {
     public class EmailRepository : IEmailRepository
     {
-        public Task<List<PendentEmail>> GetNotProcessedEmails()
+        private readonly ApplicationContext _context;
+
+        public EmailRepository(ApplicationContext context)
         {
-            throw new NotImplementedException();
-            //Buscar na base os emails que precisam ser enviados
+            _context = context;
+        }
+
+        public async Task<List<PendentEmail>> GetNotProcessedEmails()
+        {
+            return await _context.PendentEmails.Where(x => x.Processed == false).ToListAsync();
         }
     }
 }
