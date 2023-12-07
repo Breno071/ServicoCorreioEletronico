@@ -19,5 +19,12 @@ namespace AppRepository.Repository
         {
             return await _context.PendentEmails.Where(x => x.Processed == false).ToListAsync();
         }
+
+        public async Task Update(PendentEmail email)
+        {
+            email.ProcessedDate = DateTime.Now;
+            _context.Entry(email).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }
