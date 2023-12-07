@@ -29,7 +29,7 @@ namespace ConsumerWindowsService
 
                     if (messages.Count > 0)
                     {
-                        //Envio de email
+                        //Insert na base para tabela de envio de emails
                     }
                 }
                 catch (Exception ex)
