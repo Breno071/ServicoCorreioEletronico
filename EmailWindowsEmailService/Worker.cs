@@ -51,35 +51,47 @@ namespace EmailWindowsEmailService
         private async Task Rotina()
         {
             IEmailRepository emailRepository = new EmailRepository(_context ?? throw new Exception("ApplicationContext is null, cannot continue"));
+            ILogRepository logRepository = new LogRepository(_context ?? throw new Exception("ApplicationContext is null, cannot continue"));
             IEmailService emailService = new EmailService();
 
-            //TODO Buscar na base os emails a serem enviados e enviar
+            //Busca na base os emails a serem enviados e enviar
             List<PendentEmail> listaEmailsNaoProcessados = await emailRepository.GetNotProcessedEmails();
 
 
             foreach (var email in listaEmailsNaoProcessados)
             {
-                Email emailToSend = new()
+                try
                 {
-                    Attachments = email.Email.Attachments,
-                    Body = email.Email.Body,
-                    ToName = email.Email.ToName,
-                    From = email.Email.From,
-                    Subject = email.Email.Subject,
-                    To = email.Email.To
-                };
-                bool sucesso = emailService.SendEmail(emailToSend);
+                    Email emailToSend = new()
+                    {
+                        Attachments = email.Email.Attachments,
+                        Body = email.Email.Body,
+                        ToName = email.Email.ToName,
+                        From = email.Email.From,
+                        Subject = email.Email.Subject,
+                        To = email.Email.To
+                    };
+                    bool sucesso = emailService.SendEmail(emailToSend);
 
-                if (sucesso)
-                    email.Processed = true;
-                else
-                    email.Processed = false;
+                    if (sucesso)
+                    {
+                        email.Processed = true;
+                        //Marca como processados os emails que foram enviados
+                        await emailRepository.Update(email);
+                    }
+                }
+                catch (Exception e)
+                {
+                    await logRepository.Add(new Log()
+                    {
+                        LogType = LogType.Error,
+                        Message = e.Message
+                    });
+                }
 
-                //TODO Marcar como processados os emails que foram enviados
                 await Task.Delay(1000);
             }
 
-            //TODO Gravar log de envio(Quais deram sucesso e quais deram falha)
         }
     }
 }
