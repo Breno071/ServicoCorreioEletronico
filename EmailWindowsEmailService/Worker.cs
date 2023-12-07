@@ -1,3 +1,5 @@
+using AppRepository.Data;
+using AppRepository.Entities;
 using AppRepository.Interfaces;
 using AppRepository.Repository;
 using Utills;
@@ -9,10 +11,13 @@ namespace EmailWindowsEmailService
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IServiceProvider _serviceProvider;
+        private ApplicationContext _context;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -26,7 +31,12 @@ namespace EmailWindowsEmailService
 
                 try
                 {
-                    await Rotina();
+                    _logger.LogInformation("Consume Scoped Service Hosted Service is working.");
+                    using (var scope = _serviceProvider.CreateScope())
+                    {
+                        _context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                        await Rotina();
+                    }
                 }
                 catch (Exception)
                 {
@@ -40,15 +50,25 @@ namespace EmailWindowsEmailService
 
         private async Task Rotina()
         {
-            IEmailRepository emailRepository = new EmailRepository();
+            IEmailRepository emailRepository = new EmailRepository(_context ?? throw new Exception("ApplicationContext is null, cannot continue"));
             IEmailService emailService = new EmailService();
 
             //TODO Buscar na base os emails a serem enviados e enviar
-            List<Email> listaEmailsNaoProcessados = await emailRepository.GetNotProcessedEmails();
+            List<PendentEmail> listaEmailsNaoProcessados = await emailRepository.GetNotProcessedEmails();
+
 
             foreach (var email in listaEmailsNaoProcessados)
             {
-                bool sucesso = emailService.SendEmail(email);
+                Email emailToSend = new()
+                {
+                    Attachments = email.Email.Attachments,
+                    Body = email.Email.Body,
+                    ToName = email.Email.ToName,
+                    From = email.Email.From,
+                    Subject = email.Email.Subject,
+                    To = email.Email.To
+                };
+                bool sucesso = emailService.SendEmail(emailToSend);
 
                 if (sucesso)
                     email.Processed = true;
