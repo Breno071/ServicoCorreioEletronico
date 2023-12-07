@@ -14,5 +14,7 @@ namespace AppRepository.Entities
         public long Id { get; set; }
         public Email Email { get; set; } = new Email();
         public bool Processed { get; set; } = false;
+        public DateTime? ProcessedDate { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }
