@@ -14,6 +14,6 @@ namespace AppRepository.Data
         {
         }
 
-        public DbSet<PendentEmail> PendentEmail { get; set; } = default!;
+        public DbSet<PendentEmail> PendentEmails { get; set; } = default!;
     }
 }
