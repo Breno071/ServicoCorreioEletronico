@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.7.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AppRepository\AppRepository.csproj" />
+  </ItemGroup>
 </Project>
