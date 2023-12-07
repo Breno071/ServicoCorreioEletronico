@@ -15,5 +15,6 @@ namespace AppRepository.Data
         }
 
         public DbSet<PendentEmail> PendentEmails { get; set; } = default!;
+        public DbSet<Log> Logs { get; set; } = default!;
     }
 }

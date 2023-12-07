@@ -4,17 +4,21 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Utills.Models;
 
 namespace AppRepository.Entities
 {
-    public class PendentEmail
+    public class Log
     {
         [Key]
         public Guid Id { get; set; }
-        public Email Email { get; set; } = new Email();
-        public bool Processed { get; set; } = false;
-        public DateTime? ProcessedDate { get; set; }
-        public DateTime CreateDate { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public DateTime DtInclusao { get; set; } = DateTime.Now;
+        public LogType LogType { get; set; }
+    }
+
+    public enum LogType
+    {
+        Info,
+        Error
     }
 }
