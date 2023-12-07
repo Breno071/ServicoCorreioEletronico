@@ -1,7 +1,13 @@
-using Producer;
+﻿using Producer;
 using RabbitMQ.Client;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using AppRepository.Data;
+using AppRepository.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+RepoContextConfig.AddDbContext(builder.Services);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
