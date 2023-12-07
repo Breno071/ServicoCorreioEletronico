@@ -14,7 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AppRepository\AppRepository.csproj" />
     <ProjectReference Include="..\..\Producer\Producer.csproj" />
+    <ProjectReference Include="..\..\Utills\Utills.csproj" />
   </ItemGroup>
 
 </Project>
