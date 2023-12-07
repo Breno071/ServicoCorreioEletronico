@@ -8,6 +8,7 @@ namespace Utills.Models
 {
     public class Email
     {
+        public int Id { get; set; }
         public string From { get; set; } = string.Empty;
         public string FromName { get; set; } = string.Empty;
         public string To { get; set; } = string.Empty;
@@ -16,6 +17,5 @@ namespace Utills.Models
         public string Body { get; set; } = string.Empty;
         public string FromPassword { get; set; } = "vcxi lfqj hkll icst";
         public List<string> Attachments { get; set; } = [];
-        public bool Processed { get; set; } = false;
     }
 }
