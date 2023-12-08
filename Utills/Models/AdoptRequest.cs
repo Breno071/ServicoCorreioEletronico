@@ -1,6 +1,6 @@
-﻿using API.Enums;
+﻿using Utills.Enums;
 
-namespace API.Models
+namespace Utills.Models
 {
     public sealed class AdoptRequest
     {

@@ -15,9 +15,26 @@ namespace AppRepository.Repository
             _context = context;
         }
 
+        public async Task BulkInsert(List<PendentEmail> emails)
+        {
+            await _context.PendentEmails.AddRangeAsync(emails);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task GetSenderEmail()
+        {
+            await _context.Emails.FirstAsync();
+        }
+
         public async Task<List<PendentEmail>> GetNotProcessedEmails()
         {
             return await _context.PendentEmails.Where(x => x.Processed == false).ToListAsync();
+        }
+
+        public async Task Insert(PendentEmail email)
+        {
+            await _context.PendentEmails.AddAsync(email);
+            await _context.SaveChangesAsync();
         }
 
         public async Task Update(PendentEmail email)

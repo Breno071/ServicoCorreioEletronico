@@ -1,10 +1,16 @@
-﻿using RabbitMQ.Client;
+﻿using AppRepository.Data;
+using AppRepository.Entities;
+using AppRepository.Interfaces;
+using AppRepository.Repository;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Utills.Models;
 
 namespace ConsumerWindowsService
 {
@@ -15,10 +21,16 @@ namespace ConsumerWindowsService
             HostName = "localhost"
         };
         private const string QUEUE_NAME = "Adoptions";
+        private readonly ApplicationContext _context;
 
-        public async Task<List<string>> GetMessages()
+        public Consumer(ApplicationContext context)
         {
-            List<string> messages = new();
+            _context = context;
+        }
+
+        public async Task<List<AdoptRequest>> GetMessages()
+        {
+            List<AdoptRequest> messages = [];
             await Task.Run(() =>
             {
                 using var connection = _factory.CreateConnection();
@@ -37,7 +49,32 @@ namespace ConsumerWindowsService
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
 
-                    messages.Add(message);
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(message))
+                        {
+                            AdoptRequest request = JsonSerializer.Deserialize<AdoptRequest>(message);
+
+                            if (request is not null)                            
+                                messages.Add(request);
+                            else
+                                throw new Exception($"Não foi possível deserializar a mensagem {message}");
+                        }
+                    }
+                    catch( JsonException jsonEx)
+                    {
+                        ILogRepository logRepository = new LogRepository(_context);
+                        logRepository.Add(new Log()
+                        {
+                            LogType = LogType.Error,
+                            Message = jsonEx.Message
+                        });
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
                 };
                 channel.BasicConsume(queue: QUEUE_NAME,
                                       autoAck: true,

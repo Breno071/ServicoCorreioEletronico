@@ -2,6 +2,10 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
 using AppRepository.Data;
+using AppRepository.Interfaces;
+using AppRepository.Repository;
+using Utills.Models;
+using AppRepository.Entities;
 
 namespace ConsumerWindowsService
 {
@@ -9,13 +13,12 @@ namespace ConsumerWindowsService
     {
         private readonly ILogger<Worker> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly Consumer _consumer;
+        private Consumer _consumer;
         private ApplicationContext _context;
 
         public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
-            _consumer = new();
             _serviceProvider = serviceProvider;
         }
 
@@ -32,6 +35,7 @@ namespace ConsumerWindowsService
                     using (var scope = _serviceProvider.CreateScope())
                     {
                         _context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                        _consumer = new Consumer(_context);
                         await Rotina();
                     }
                 }
@@ -45,11 +49,26 @@ namespace ConsumerWindowsService
 
         private async Task Rotina()
         {
-            List<string> messages = await _consumer.GetMessages();
+            List<AdoptRequest> adoptions = await _consumer.GetMessages();
+            IEmailRepository emailRepository = new EmailRepository(_context);
 
-            if (messages.Count > 0)
+            if (adoptions.Count > 0)
             {
-                //Insert na base para tabela de envio de emails
+                List<PendentEmail> pendentEmails = new List<PendentEmail>();
+                foreach (var adoption in adoptions)
+                {
+                    pendentEmails.Add(new PendentEmail
+                    {
+                        Email = new Email
+                        {
+                            From = "bns734683@gmail.com",
+                            To = adoption.Adopter.Email,
+                            Subject = adoption.Adopter.Nome,
+                            Body = "Body"
+                        },
+                    });
+                }
+                await emailRepository.BulkInsert(pendentEmails);
             }
         }
     }
