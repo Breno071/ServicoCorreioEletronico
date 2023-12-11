@@ -9,6 +9,7 @@ namespace AppRepository.Interfaces
 {
     public interface ILogRepository
     {
-        Task Add(Log log);
+        Task AddAsync(Log log);
+        void Add(Log log);
     }
 }

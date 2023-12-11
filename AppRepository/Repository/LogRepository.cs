@@ -18,10 +18,16 @@ namespace AppRepository.Repository
             _context = context;
         }
 
-        public async Task Add(Log log)
+        public async Task AddAsync(Log log)
         {
             _context.Logs.Add(log);
             await _context.SaveChangesAsync();
+        }
+        
+        public void Add(Log log)
+        {
+            _context.Logs.Add(log);
+            _context.SaveChanges();
         }
     }
 }
