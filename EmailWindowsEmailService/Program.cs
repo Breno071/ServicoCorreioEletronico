@@ -1,12 +1,10 @@
+using AppRepository.Configuration;
 using AppRepository.Data;
 using EmailWindowsEmailService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddDbContextPool<ApplicationContext>(options =>
-{
-    options.UseInMemoryDatabase("db");
-});
+RepoContextConfig.AddDbContext(builder.Services, builder.Configuration);
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
