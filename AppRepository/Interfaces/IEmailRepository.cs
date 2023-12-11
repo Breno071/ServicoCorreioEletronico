@@ -1,5 +1,4 @@
 ﻿using AppRepository.Entities;
-using Utills.Models;
 
 namespace AppRepository.Interfaces
 {
