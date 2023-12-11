@@ -13,5 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppRepository\AppRepository.csproj" />
+    <ProjectReference Include="..\Utills\Utills.csproj" />
   </ItemGroup>
 </Project>
