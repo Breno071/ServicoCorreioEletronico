@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Utills.Validations
@@ -10,7 +11,12 @@ namespace Utills.Validations
     {
         public static bool IsEmailValid(string email)
         {
-            return email.Contains("@");
+            // Padrão básico de expressão regular para validar um endereço de e-mail
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
+            Regex regex = new(pattern);
+
+            return regex.IsMatch(email);
         }
 
         public static bool IsCpfValid(string cpf)
