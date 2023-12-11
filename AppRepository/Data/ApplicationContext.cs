@@ -4,12 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using AppRepository.Entities;
 using Microsoft.EntityFrameworkCore;
-using Utills.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace AppRepository.Data
 {
     public class ApplicationContext : DbContext
     {
+        public ApplicationContext()
+        {
+            
+        }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {

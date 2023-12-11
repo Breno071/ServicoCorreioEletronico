@@ -10,7 +10,7 @@ namespace AppRepository.Entities
     public class Log
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Message { get; set; } = string.Empty;
         public DateTime DtInclusao { get; set; } = DateTime.Now;
         public LogType LogType { get; set; }

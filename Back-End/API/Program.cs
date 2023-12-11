@@ -7,7 +7,7 @@ using AppRepository.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-RepoContextConfig.AddDbContext(builder.Services);
+RepoContextConfig.AddDbContext(builder.Services, builder.Configuration);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

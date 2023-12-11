@@ -1,6 +1,6 @@
-﻿using API.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Producer;
+using Utills.Models;
 
 namespace API.Controllers
 {

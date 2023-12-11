@@ -31,7 +31,7 @@ namespace ConsumerWindowsService
         public async Task<List<AdoptRequest>> GetMessages()
         {
             List<AdoptRequest> messages = [];
-            await Task.Run(() =>
+            return await Task.Run(() =>
             {
                 using var connection = _factory.CreateConnection();
                 using var channel = connection.CreateModel();
@@ -79,8 +79,8 @@ namespace ConsumerWindowsService
                 channel.BasicConsume(queue: QUEUE_NAME,
                                       autoAck: true,
                                       consumer: consumer);
+                return messages;
             });
-            return messages;
         }
     }
 }

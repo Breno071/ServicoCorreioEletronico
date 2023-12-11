@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utills.Models
+namespace AppRepository.Entities
 {
     public class Email
     {

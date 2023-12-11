@@ -1,5 +1,6 @@
 ﻿using AppRepository.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,11 @@ namespace AppRepository.Configuration
 {
     public class RepoContextConfig
     {
-        public static void AddDbContext(IServiceCollection services)
+        public static void AddDbContext(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseInMemoryDatabase("db"));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                //options.UseInMemoryDatabase("db"));
         }
     }
 }
