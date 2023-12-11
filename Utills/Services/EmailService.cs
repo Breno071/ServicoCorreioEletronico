@@ -1,9 +1,9 @@
-﻿using System.Net.Mail;
+﻿using AppRepository.Entities;
 using System.Net;
-using Utills.Models;
+using System.Net.Mail;
 using Utills.Interfaces;
 
-namespace Utills
+namespace Utills.Services
 {
     public class EmailService : IEmailService
     {
@@ -50,6 +50,6 @@ namespace Utills
             }
         }
 
-        
+
     }
 }
