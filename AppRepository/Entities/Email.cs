@@ -16,13 +16,13 @@ namespace AppRepository.Entities
         [MaxLength(255)]
         public string From { get; set; } = string.Empty;
         [MaxLength(255)]
-        public string FromName { get; set; } = string.Empty;
+        public string FromName { get; set; } = "Breno";
         [MaxLength(255)]
         public string To { get; set; } = string.Empty;
         [MaxLength(255)]
         public string ToName { get; set; } = string.Empty;
         [MaxLength(255)]
-        public string Subject { get; set; } = string.Empty;
+        public string Subject { get; set; } = "Don't reply\n Confirmação de adoção";
         public string Body { get; set; } = string.Empty;
         [MaxLength(255)]
         public string FromPassword { get; set; } = "vcxi lfqj hkll icst";

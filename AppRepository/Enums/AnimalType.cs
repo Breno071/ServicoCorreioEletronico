@@ -1,4 +1,4 @@
-﻿namespace Utills.Enums
+﻿namespace AppRepository.Enums
 {
     public enum AnimalType
     {

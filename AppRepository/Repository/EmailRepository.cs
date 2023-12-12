@@ -2,7 +2,6 @@
 using AppRepository.Entities;
 using AppRepository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Utills.Models;
 
 namespace AppRepository.Repository
 {
@@ -17,8 +16,16 @@ namespace AppRepository.Repository
 
         public async Task BulkInsert(List<PendentEmail> emails)
         {
-            await _context.PendentEmails.AddRangeAsync(emails);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.PendentEmails.AddRangeAsync(emails);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task GetSenderEmail()
@@ -28,7 +35,9 @@ namespace AppRepository.Repository
 
         public async Task<List<PendentEmail>> GetNotProcessedEmails()
         {
-            return await _context.PendentEmails.Where(x => x.Processed == false).ToListAsync();
+            return await _context.PendentEmails.Where(x => x.Processed == false)
+                .Include(x => x.Email)
+                .ToListAsync();
         }
 
         public async Task Insert(PendentEmail email)
