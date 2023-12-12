@@ -1,4 +1,5 @@
-﻿using AppRepository.Entities;
+﻿using API.DTOs;
+using AppRepository.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Producer;
 using Utills.Validations;
@@ -17,7 +18,7 @@ namespace API.Controllers
         }
 
         [HttpPost("adopt")]
-        public async Task<IActionResult> Adopt([FromBody] AdoptRequest adoption)
+        public async Task<IActionResult> Adopt([FromBody] AdopterRequestDTO adoption)
         {
             if (!Validations.IsEmailValid(adoption.Adopter.Email))
                 return BadRequest("E-mail inválido!");
@@ -25,16 +26,25 @@ namespace API.Controllers
             if(!Validations.IsCpfValid(adoption.Adopter.CPF))
                 return BadRequest("CPF inválido!");
 
-            List<Task> tarefas = new()
+            AdoptRequest request = new()
             {
-                Task.Run(() =>
+                Adopter = new Adopter()
                 {
-                     _producer.Send(adoption);
-                })
+                    CPF = adoption.Adopter.CPF,
+                    Email = adoption.Adopter.Email,
+                    Nome = adoption.Adopter.Nome,
+                    DataNascimento = adoption.Adopter.DataNascimento
+                },
+                Breed = adoption.Breed,
+                AnimalType = adoption.AnimalType
             };
 
-            await Task.WhenAll(tarefas);
-            return Accepted(adoption);
+            await Task.Run(() =>
+            {
+                _producer.Send(request);
+            });
+
+            return Accepted(request);
         }
     }
 }
