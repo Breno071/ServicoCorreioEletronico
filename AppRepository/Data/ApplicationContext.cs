@@ -21,6 +21,8 @@ namespace AppRepository.Data
         }
 
         public DbSet<PendentEmail> PendentEmails { get; set; } = default!;
+        public DbSet<AdoptRequest> Adoptions { get; set; } = default!;
+        public DbSet<Adopter> Adopters { get; set; } = default!;
         public DbSet<Email> Emails { get; set; } = default!;
         public DbSet<Log> Logs { get; set; } = default!;
     }
