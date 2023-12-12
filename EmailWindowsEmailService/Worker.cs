@@ -4,7 +4,8 @@ using AppRepository.Interfaces;
 using AppRepository.Repository;
 using Utills;
 using Utills.Interfaces;
-using Utills.Models;
+using Utills.Security;
+using Utills.Services;
 
 namespace EmailWindowsEmailService
 {
@@ -57,32 +58,24 @@ namespace EmailWindowsEmailService
             //Busca na base os emails a serem enviados e enviar
             List<PendentEmail> listaEmailsNaoProcessados = await emailRepository.GetNotProcessedEmails();
 
-
             foreach (var email in listaEmailsNaoProcessados)
             {
                 try
                 {
-                    Email emailToSend = new()
-                    {
-                        Attachments = email.Email.Attachments,
-                        Body = email.Email.Body,
-                        ToName = email.Email.ToName,
-                        From = email.Email.From,
-                        Subject = email.Email.Subject,
-                        To = email.Email.To
-                    };
-                    bool sucesso = emailService.SendEmail(emailToSend);
+                    email.Email.FromPassword = CriptografyService.Descriptografar(email.Email.FromPassword);
+                    bool sucesso = emailService.SendEmail(email.Email);
 
                     if (sucesso)
                     {
                         email.Processed = true;
+                        email.Email.FromPassword = CriptografyService.Criptografar(email.Email.FromPassword);
                         //Marca como processados os emails que foram enviados
                         await emailRepository.Update(email);
                     }
                 }
                 catch (Exception e)
                 {
-                    await logRepository.Add(new Log()
+                    logRepository.Add(new Log()
                     {
                         LogType = LogType.Error,
                         Message = e.Message
