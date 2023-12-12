@@ -1,75 +1,115 @@
-using RabbitMQ.Client.Events;
-using RabbitMQ.Client;
-using System.Text;
 using AppRepository.Data;
+using AppRepository.Entities;
 using AppRepository.Interfaces;
 using AppRepository.Repository;
-using Utills.Models;
-using AppRepository.Entities;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using StackExchange.Redis;
+using System.Text;
+using System.Text.Json;
 
 namespace ConsumerWindowsService
 {
     public class Worker : BackgroundService
     {
+        private readonly ConnectionFactory _factory = new()
+        {
+            HostName = "localhost"
+        };
         private readonly ILogger<Worker> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private Consumer _consumer;
+        private IConnection _connection;
+        private IModel _channel;
+        private const string QUEUE_NAME = "Adoptions";
         private ApplicationContext _context;
 
         public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
+            _connection = _factory.CreateConnection();
+            _channel = _connection.CreateModel();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                }
                 try
                 {
-                    using (var scope = _serviceProvider.CreateScope())
+                    if (_logger.IsEnabled(LogLevel.Information))
                     {
-                        _context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-                        _consumer = new Consumer(_context);
-                        await Rotina();
+                        _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                     }
+
+                    await ConsumeRabbitMessages();
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
-                }
-                await Task.Delay(10000, stoppingToken);
+                } 
             }
         }
 
-        private async Task Rotina()
+        internal async Task ConsumeRabbitMessages()
         {
-            List<AdoptRequest> adoptions = await _consumer.GetMessages();
-            IEmailRepository emailRepository = new EmailRepository(_context);
+            await Task.Delay(1000);
+            IAdoptionRepository adoptionRepository;
 
-            if (adoptions.Count > 0)
+            _channel.QueueDeclare(queue: QUEUE_NAME,
+                        durable: true,
+                        exclusive: false,
+                        autoDelete: false,
+                        arguments: null);
+
+            var consumer = new EventingBasicConsumer(_channel);
+            consumer.Received += (model, ea) =>
             {
-                List<PendentEmail> pendentEmails = new List<PendentEmail>();
-                foreach (var adoption in adoptions)
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+
+                Console.Out.WriteLine(body.ToString());
+                Console.Out.WriteLine(message);
+                try
                 {
-                    pendentEmails.Add(new PendentEmail
+                    if (!string.IsNullOrEmpty(message))
                     {
-                        Email = new Email
+                        AdoptRequest request = JsonSerializer.Deserialize<AdoptRequest>(message);
+
+                        if (request is not null)
                         {
-                            From = "bns734683@gmail.com",
-                            To = adoption.Adopter.Email,
-                            Subject = adoption.Adopter.Nome,
-                            Body = "Body"
-                        },
+                            request.Id = Guid.NewGuid();
+                            request.Adopter.Id = Guid.NewGuid();
+
+                            using (var scope = _serviceProvider.CreateScope())
+                            {
+                                _context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                                adoptionRepository = new AdoptionRepository(_context);
+                                adoptionRepository.Insert(request);
+                            }
+                        }
+                        else
+                            throw new Exception($"Não foi possível deserializar a mensagem {message}");
+                    }
+                }
+                catch (JsonException jsonEx)
+                {
+                    ILogRepository logRepository = new LogRepository(_context);
+                    logRepository.Add(new Log()
+                    {
+                        LogType = LogType.Error,
+                        Message = jsonEx.Message
                     });
                 }
-                await emailRepository.BulkInsert(pendentEmails);
-            }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Erro fatal: " + e.Message);
+                }
+            };
+
+            _channel.BasicConsume(queue: QUEUE_NAME,
+                                  autoAck: true,
+                                  consumer: consumer);
         }
     }
 }
