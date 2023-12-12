@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AppRepository.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Producer;
-using Utills.Models;
 using Utills.Validations;
 
 namespace API.Controllers
