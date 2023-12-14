@@ -16,44 +16,20 @@ namespace AppRepository.Repository
 
         public async Task BulkInsert(List<AdoptRequest> adoptions)
         {
-            try
-            {
-                await _context.AddRangeAsync(adoptions);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            await _context.AddRangeAsync(adoptions);
+            await _context.SaveChangesAsync();
         }
 
         public void Insert(AdoptRequest request)
         {
-            try
-            {
-                _context.Adoptions.Add(request);
-                _context.SaveChanges();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            _context.Adoptions.Add(request);
+            _context.SaveChanges();
         }
 
         public async Task InsertAsync(AdoptRequest request)
         {
-            try
-            {
-                await _context.Adoptions.AddAsync(request);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            await _context.Adoptions.AddAsync(request);
+            await _context.SaveChangesAsync();
         }
     }
 }

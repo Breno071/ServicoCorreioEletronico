@@ -16,16 +16,8 @@ namespace AppRepository.Repository
 
         public async Task BulkInsert(List<PendentEmail> emails)
         {
-            try
-            {
-                await _context.PendentEmails.AddRangeAsync(emails);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            await _context.PendentEmails.AddRangeAsync(emails);
+            await _context.SaveChangesAsync();
         }
 
         public async Task GetSenderEmail()
