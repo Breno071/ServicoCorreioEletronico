@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailWindowsEmailService", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utills", "Utills\Utills.csproj", "{40E64053-44FB-441B-AE60-90B747EF44AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppRepository", "AppRepository\AppRepository.csproj", "{8000BE8B-DBFC-4DAE-B2F0-640FC0A4477B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppRepository", "AppRepository\AppRepository.csproj", "{8000BE8B-DBFC-4DAE-B2F0-640FC0A4477B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
