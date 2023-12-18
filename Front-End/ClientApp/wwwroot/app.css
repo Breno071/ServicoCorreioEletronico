@@ -1,5 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    background: url("./assets/pexels-chevanon-photography-1108099.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
 a, .btn-link {
