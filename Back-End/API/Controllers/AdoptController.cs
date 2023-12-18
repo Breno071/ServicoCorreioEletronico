@@ -35,7 +35,9 @@ namespace API.Controllers
                     Nome = adoptionRequest.Adopter.Nome,
                     DataNascimento = adoptionRequest.Adopter.DataNascimento
                 },
-                Breed = adoptionRequest.Breed,
+                Specie = adoptionRequest.Specie,
+                Age = adoptionRequest.Age,
+                Sex = adoptionRequest.Sex,
                 AnimalType = adoptionRequest.AnimalType
             };
 

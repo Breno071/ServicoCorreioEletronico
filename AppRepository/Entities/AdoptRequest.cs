@@ -10,7 +10,9 @@ namespace AppRepository.Entities
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
         public Adopter Adopter { get; set; } = new();
-        public string Breed { get; set; } = string.Empty;
+        public string Specie { get; set; } = string.Empty;
+        public string Age { get; set; } = string.Empty;
+        public char Sex { get; set; }
         public AnimalType AnimalType { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public bool Processed { get; set; } = false;
