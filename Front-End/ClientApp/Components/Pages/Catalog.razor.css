@@ -54,7 +54,6 @@ p {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: 900px;
     height: 600px;
     background: #fff;
     margin: 20px;
@@ -67,11 +66,13 @@ p {
         align-items: center;
         width: 50%;
         height: 100%;
-        background: #212121;
+        background: url('./assets/pexels-chevanon-photography-1108099.jpg') no-repeat;
+        background-size: cover;
+        background-position: center;
         transition: .3s linear;
     }
 
-        .catalog-container .imgBx:before {
+        /*.catalog-container .imgBx:before {
             content: 'Nike';
             position: absolute;
             top: 0px;
@@ -80,12 +81,12 @@ p {
             opacity: 0.2;
             font-size: 8em;
             font-weight: 800;
-        }
+        }*/
 
         .catalog-container .imgBx img {
             position: relative;
-            width: 700px;
-            transform: rotate(-30deg);
+            width: 300px;
+            /*transform: rotate(-30deg);*/
             left: -50px;
             transition: .9s linear;
         }
@@ -117,7 +118,7 @@ p {
 
         .catalog-container .details p {
             max-width: 85%;
-            margin-left: 15%;
+            margin-left: 3%;
             color: #333;
             font-size: 15px;
             margin-bottom: 36px;
@@ -146,42 +147,6 @@ p {
             float: right;
         }
 
-.product-colors span {
-    width: 26px;
-    height: 26px;
-    top: 7px;
-    margin-right: 12px;
-    left: 10px;
-    border-radius: 50%;
-    position: relative;
-    cursor: pointer;
-    display: inline-block;
-}
-
-.black {
-    background: #000;
-}
-
-.red {
-    background: #D5212E;
-}
-
-.orange {
-    background: #F18557;
-}
-
-.product-colors .active:after {
-    content: "";
-    width: 36px;
-    height: 36px;
-    border: 2px solid #000;
-    position: absolute;
-    border-radius: 50%;
-    box-sizing: border-box;
-    left: -5px;
-    top: -5px;
-}
-
 /* responsive */
 @media (max-width: 1080px) {
     .catalog-container {
@@ -200,7 +165,7 @@ p {
             .catalog-container .imgBx img {
                 left: initial;
                 max-width: 100%;
-                transform: rotate(0deg);
+                /*transform: rotate(0deg);*/
             }
 
     .details {
