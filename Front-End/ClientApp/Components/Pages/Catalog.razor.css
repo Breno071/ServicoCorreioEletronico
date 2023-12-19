@@ -46,7 +46,7 @@ p {
     align-items: center;
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
-    background: #fff;
+    background: linear-gradient(to top, transparent 80%, #688157 99%), #688157;
 }
 
 .catalog-container {
