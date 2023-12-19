@@ -8,69 +8,91 @@
         Explore o catálogo e adquira um novo amigo.
     </p>
     <br>
-    <a class="button" href="#catalog">Catálogo</a>
+    @* <a class="button" href="#catalog">Catálogo</a> *@
 </section>
 
-<section class="carousel carousel-dark slide" data-bs-ride="carousel" style="margin-top:50px;" id="catalog">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <div class="catalog-container">
-                <div class="imgBx">
-                    @* <img src="./assets/pexels-chevanon-photography-1108099.jpg" alt="Nike Jordan Proto-Lyte Image"> *@
-                </div>
-                <div class="details">
-                    <div class="content">
-                        <h2>
-                            Gemeos <br>
-                            <span>Disponível para adoção</span>
-                        </h2>
-                        <p>
-                            Featuring soft foam cushioning and lightweight, woven fabric in the upper, the Jordan Proto-Lyte is
-                            made for all-day, bouncy comfort.
-                            Lightweight Breathability: Lightweight woven fabric with real or synthetic leather provides
-                            breathable support.
-                            Cushioned Comfort: A full-length foam midsole delivers lightweight, plush cushioning.
-                            Secure Traction: Exaggerated herringbone-pattern outsole offers traction on a variety of surfaces.
-                        </p>
-                        <h3>Rs. 12,800</h3>
-                        <button>Buy Now</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="catalog-container">
-                <div class="imgBx">
-                    @* <img src="./assets/pexels-chevanon-photography-1108099.jpg" alt="Nike Jordan Proto-Lyte Image"> *@
-                </div>
-                <div class="details">
-                    <div class="content">
-                        <h2>
-                            Gemeos <br>
-                            <span>Disponível para adoção</span>
-                        </h2>
-                        <p>
-                            Featuring soft foam cushioning and lightweight, woven fabric in the upper, the Jordan Proto-Lyte is
-                            made for all-day, bouncy comfort.
-                            Lightweight Breathability: Lightweight woven fabric with real or synthetic leather provides
-                            breathable support.
-                            Cushioned Comfort: A full-length foam midsole delivers lightweight, plush cushioning.
-                            Secure Traction: Exaggerated herringbone-pattern outsole offers traction on a variety of surfaces.
-                        </p>
-                        <h3>Rs. 12,800</h3>
-                        <button>Buy Now</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#catalog" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#catalog" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+
+
+@if (Loading)
+{
+    <div style="margin:250px;" class="d-flex justify-content-center align-baseline">
+        @* <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div><div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div><div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div> *@
+        Carregando...
     </div>
-</section>
+}
+else
+{
+    <section class="carousel carousel-dark slide" data-bs-ride="carousel" style="margin-top:180px;" id="catalog">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Request.pets.Count; i++)
+            {
+                @if (GetImage(Request.pets[i].large_results_photo_url))
+            {
+                    <div class="carousel-item @(i == 0? "active" : string.Empty)">
+                        <div class="catalog-container">
+                            <div class="imgBx" style="
+                            background:url('@Request.pets[i].large_results_photo_url') no-repeat;
+                            background-size: cover;
+                            background-position: center;
+                            position: relative;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 50%;
+                            height: 100%;*/
+                            /*background: url('./assets/pexels-chevanon-photography-1108099.jpg') no-repeat;*/
+                            transition: .3s linear;">
+                            </div>
+                            <div class="details">
+                                <div class="content">
+                                    <h2>
+                                        @Request.pets[i].pet_name <br>
+                                        <span>@Request.pets[i].primary_breed</span>
+                                    </h2>
+                                    <p>
+                                        @switch (Request.pets[i].age.ToLower())
+                                        {
+                                            case "adult":
+                                                Request.pets[i].age = "Adulto";
+                                                break;
+                                            case "young":
+                                                Request.pets[i].age = "Jovem";
+                                                break;
+                                            case "senior":
+                                                Request.pets[i].age = "Idade avançada";
+                                                break;
+                                        }
+                                        Idade: @Request.pets[i].age
 
+                                        <br>
+                                        Sexo: @(Request.pets[i].sex.ToUpper().Equals("M") ? "Macho" : "Fêmea") <br>
+                                        Raçã: @Request.pets[i].primary_breed <br>
+                                        @(string.IsNullOrEmpty(Request.pets[i].secondary_breed) ? string.Empty : "Raça secundária: " + Request.pets[i].secondary_breed)
+                                        Cidade do animal: @Request.pets[i].addr_city <br>
+                                        Código do estado: @Request.pets[i].addr_state_code
+                                    </p>
+                                    @* <h3>Rs. 12,800</h3> *@
+                                    <button>Detalhes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            <button class="carousel-control-prev" type="button" data-bs-target="#catalog" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#catalog" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+}

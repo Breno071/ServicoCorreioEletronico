@@ -59,18 +59,18 @@ p {
     margin: 20px;
 }
 
-    .catalog-container .imgBx {
+    /*.catalog-container .imgBx {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         width: 50%;
-        height: 100%;
-        background: url('./assets/pexels-chevanon-photography-1108099.jpg') no-repeat;
-        background-size: cover;
+        height: 100%;*/
+        /*background: url('./assets/pexels-chevanon-photography-1108099.jpg') no-repeat;*/
+        /*background-size: cover;
         background-position: center;
         transition: .3s linear;
-    }
+    }*/
 
         /*.catalog-container .imgBx:before {
             content: 'Nike';
