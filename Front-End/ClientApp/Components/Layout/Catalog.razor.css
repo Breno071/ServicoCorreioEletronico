@@ -8,13 +8,13 @@
 
 .description-title {
     color: white;
-    /*background-color: yellow;*/
+    background-color: #688157;
     max-width: 600px;
 }
 
 .description {
     color: white;
-    /*background-color: yellow;*/
+    background-color: #688157;
     max-width: 500px;
     padding: 10px;
 }
@@ -46,7 +46,7 @@ p {
     align-items: center;
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to top, transparent 80%, #688157 99%), #688157;
+    background: linear-gradient(to top, transparent 80%, #fff 99%), #fff;
 }
 
 .catalog-container {

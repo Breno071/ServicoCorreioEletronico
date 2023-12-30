@@ -10,15 +10,6 @@
     align-items:center;
 }
 
-.logo {
-    font-size: 32px;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
 .navbar a {
     position:relative;
     font-size: 18px;

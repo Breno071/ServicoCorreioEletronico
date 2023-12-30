@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ClientApp.Components.Pages
+namespace ClientApp.Components.Layout
 {
     public partial class Catalog
     {

@@ -3,7 +3,7 @@ div {
 }
 
 .menu {
-    background: linear-gradient(to bottom, transparent 20%, #688157 99%), url("./assets/pexels-chevanon-photography-1108099.jpg") no-repeat;
+    background: linear-gradient(to bottom, transparent 20%, #fff 99%), url("./assets/pexels-chevanon-photography-1108099.jpg") no-repeat;
     background-size: cover;
     background-position: center;
     max-height: 500px;
