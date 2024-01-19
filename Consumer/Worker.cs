@@ -4,7 +4,6 @@ using AppRepository.Interfaces;
 using AppRepository.Repository;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using StackExchange.Redis;
 using System.Text;
 using System.Text.Json;
 
@@ -46,70 +45,73 @@ namespace ConsumerWindowsService
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex.Message);
-                } 
+                    _logger.LogError("{ex.Message}", ex.Message);
+                }
             }
         }
 
-        internal async Task ConsumeRabbitMessages()
+        public async Task ConsumeRabbitMessages()
         {
-            await Task.Delay(1000);
-            IAdoptionRepository adoptionRepository;
-
-            _channel.QueueDeclare(queue: QUEUE_NAME,
-                        durable: true,
-                        exclusive: false,
-                        autoDelete: false,
-                        arguments: null);
-
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (model, ea) =>
+            await Task.Run(() =>
             {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
+                AdoptionRepository adoptionRepository;
 
-                Console.Out.WriteLine(body.ToString());
-                Console.Out.WriteLine(message);
-                try
+                _channel.QueueDeclare(queue: QUEUE_NAME,
+                            durable: true,
+                            exclusive: false,
+                            autoDelete: false,
+                            arguments: null);
+
+                var consumer = new EventingBasicConsumer(_channel);
+                consumer.Received += (model, ea) =>
                 {
-                    if (!string.IsNullOrEmpty(message))
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+
+                    _logger.LogInformation("{body.ToString()}", body.ToString());
+                    _logger.LogInformation("{message}", message);
+
+                    try
                     {
-                        AdoptRequest request = JsonSerializer.Deserialize<AdoptRequest>(message);
-
-                        if (request is not null)
+                        if (!string.IsNullOrWhiteSpace(message))
                         {
-                            request.Id = Guid.NewGuid();
-                            request.Adopter.Id = Guid.NewGuid();
+                            AdoptRequest request = JsonSerializer.Deserialize<AdoptRequest>(message);
 
-                            using (var scope = _serviceProvider.CreateScope())
+                            if (request is not null)
                             {
+                                request.Id = Guid.NewGuid();
+                                request.Adopter.Id = Guid.NewGuid();
+
+                                using var scope = _serviceProvider.CreateScope();
                                 _context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
                                 adoptionRepository = new AdoptionRepository(_context);
                                 adoptionRepository.Insert(request);
                             }
+                            else
+                                throw new Exception($"Não foi possível deserializar a mensagem {message}");
                         }
-                        else
-                            throw new Exception($"Não foi possível deserializar a mensagem {message}");
                     }
-                }
-                catch (JsonException jsonEx)
-                {
-                    ILogRepository logRepository = new LogRepository(_context);
-                    logRepository.Add(new Log()
+                    catch (JsonException jsonEx)
                     {
-                        LogType = LogType.Error,
-                        Message = jsonEx.Message
-                    });
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Erro fatal: " + e.Message);
-                }
-            };
+                        LogRepository logRepository = new(_context);
+                        logRepository.Add(new Log()
+                        {
+                            LogType = LogType.Error,
+                            Message = jsonEx.Message
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError("{Erro fatal} ", e.Message);
+                    }
+                };
 
-            _channel.BasicConsume(queue: QUEUE_NAME,
-                                  autoAck: true,
-                                  consumer: consumer);
+                _channel.BasicConsume(queue: QUEUE_NAME,
+                                      autoAck: true,
+                                      consumer: consumer);
+
+                return Task.CompletedTask;
+            });
         }
     }
 }

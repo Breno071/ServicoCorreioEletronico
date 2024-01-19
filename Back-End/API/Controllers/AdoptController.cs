@@ -20,11 +20,8 @@ namespace API.Controllers
         [HttpPost("adopt")]
         public async Task<IActionResult> Adopt([FromBody] AdopterRequestDTO adoptionRequest)
         {
-            if (!Validations.IsEmailValid(adoptionRequest.Adopter.Email))
-                return BadRequest("E-mail inválido!");
-
-            if(!Validations.IsCpfValid(adoptionRequest.Adopter.CPF))
-                return BadRequest("CPF inválido!");
+            if (!Validations.IsEmailValid(adoptionRequest.Adopter.Email) || !Validations.IsCpfValid(adoptionRequest.Adopter.CPF))
+                return BadRequest("E-mail ou CPF inválidos!");
 
             AdoptRequest adoption = new()
             {

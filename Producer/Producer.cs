@@ -36,6 +36,8 @@ namespace Producer
                     basicProperties: null,
                     body: bytesMessage
                     );
+
+                return Task.CompletedTask;
             });
         }
     }
